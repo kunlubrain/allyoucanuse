@@ -1,2 +1,2 @@
-def print_(message: str):
-    print(message)
+from .etc import *
+from .io import *

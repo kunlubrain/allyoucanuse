@@ -1,6 +1,6 @@
 [[package]]
 name = "allyoucanuse"
-version = "1.0.1"
+version = "1.0.2"
 description = "One-liners of everything - a hodge-podge of python tools"
 category = "main"
 optional = false
@@ -9,10 +9,10 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "4de48c647f1251335f9dfd6130337618d59e4178315964990afccd82ec2d9ef2"
+content-hash = "36612c9463ebd79cb10688691a3abda723e4a6a9d0bff0af3e9d2392d6ed184c"
 
 [metadata.files]
 allyoucanuse = [
-    {file = "allyoucanuse-1.0.1-py3-none-any.whl", hash = "sha256:cb31f9998e2bacffc2dc385dbfacc09eaf6dca68342bf394247540e2dd907d77"},
-    {file = "allyoucanuse-1.0.1.tar.gz", hash = "sha256:e92688789d702385b8d52d8fd77076dda3cb2dee21a7546a6ece18caa241df7a"},
+    {file = "allyoucanuse-1.0.2-py3-none-any.whl", hash = "sha256:1a5c89bc938b50d4619243c177269ab02c463d569596e09100d70662fa6103f6"},
+    {file = "allyoucanuse-1.0.2.tar.gz", hash = "sha256:c4c29a8a7cf7b61831e187f57525c2b196302d6d380aaf3cdce2c0a9f29d50e7"},
 ]

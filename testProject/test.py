@@ -1,3 +1,3 @@
 import allyoucanuse
 
-allyoucanuse.print_("Hello World!")
+print(allyoucanuse.today_with_format())
