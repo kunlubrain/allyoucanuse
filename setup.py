@@ -14,7 +14,7 @@ setuptools.setup(
     url="https://github.com/kunlubrain/allyoucanuse",
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
-    install_requires=["jsonlines"],
+    install_requires=["jsonlines>=3.0.0,<4.0.0", "pandas>=1.4.0,<2.0.0"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

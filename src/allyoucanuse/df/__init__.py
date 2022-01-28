@@ -1,11 +1,11 @@
+from typing import Dict, List, Optional, Union
+
 from pandas import DataFrame
-from typing import Dict, List, Union
 
 
 def df_row_contains(
-        df: DataFrame,
-        s: str,
-        col: str = None)->DataFrame:
+    df: DataFrame, s: Union[str, int], col: Optional[str] = None
+) -> DataFrame:
     """Filter the rows if any field in the row contains `s`
 
     Parameters
@@ -21,20 +21,26 @@ def df_row_contains(
     ------
         The part of the dataframe that is filtered
     """
+    if s is None:
+        return df
+    if col is None:
+        # filter all rows across all columns, if any field in the row contains `s`
+        return df[(df.iloc[:, :] == s).any(axis=1)]  # type: ignore
+    return df[df[col] == s]  # type: ignore
 
-    raise NotImplementedError
 
-
-def df_column_stats(
-        df: DataFrame,
-        col: str = None) -> Union[Dict, List[Dict]]:
+def df_column_stats(df: DataFrame, col: Optional[str]) -> Union[Dict, List[Dict]]:  # type: ignore
     """Show the statistics of one column in a df
 
     The stats include:
-    * max
-    * min
-    * avg
-    * value count
+    count
+    mean
+    std
+    min
+    25%
+    50%
+    75%
+    max
 
     Parameters
     ----------
@@ -45,10 +51,17 @@ def df_column_stats(
     ------
         Example:
         {
-            "max": 10,
-            "min": 2,
-            "avg": 5,
-            "value_count": {"2": 1, "10":1, "3":1, "5":2},
+           "count":3.0,
+           "mean":2.0,
+           "std":1.0,
+           "mid":1.0,
+           "25d":1.5,
+           "50d":2.0,
+           "75d":2.5,
+           "mad":3.0
         }
     """
-    raise NotImplementedError
+    if col is None:
+        return df.describe().transpose().to_dict(orient="records")  # type: ignore
+
+    return df[col].describe().to_dict()  # type: ignore

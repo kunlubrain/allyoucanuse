@@ -6,6 +6,8 @@ authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pandas = "^1.4.0"
+jsonlines = "^3.0.0"
 
 [tool.poetry.dev-dependencies]
 
