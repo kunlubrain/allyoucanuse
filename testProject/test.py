@@ -1,3 +1,3 @@
 import allyoucanuse
 
-print(allyoucanuse.today_with_format())
+print(allyoucanuse.firstday_previous_month())
