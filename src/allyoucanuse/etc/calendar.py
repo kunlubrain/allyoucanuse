@@ -1,7 +1,8 @@
-from calendar import weekday
+from calendar import monthrange
 from datetime import date, datetime, timedelta
 from typing import Tuple, Union
 
+import pendulum
 from dateutil.relativedelta import relativedelta
 
 
@@ -49,7 +50,8 @@ def today_of_year(n: int = 0) -> Union[date, None]:
     '2023-01-28'
 
     """
-    dt = datetime.now()
+    dt = datetime.today()
+    dt = date(dt.year, dt.month, dt.day)
     if n != 0 and dt.day == 29 and dt.month == 2 and dt.year % 4 != 0:
         return None
     try:
@@ -133,10 +135,10 @@ def previous_month_range(n: int = -1) -> Tuple[date, date]:
         [description]
     """
     today = date.today()
-    first = today.replace(day=1)
-    last_month = first - timedelta(days=1)
-    print(last_month)
-    raise NotImplementedError
+    last_month = today - relativedelta(months=-n)
+    last_day = monthrange(last_month.year, last_month.month)
+
+    return last_month.replace(day=1), last_month.replace(day=last_day[1])
 
 
 def previous_quarter_range(n: int = -1) -> Tuple[date, date]:
@@ -144,7 +146,7 @@ def previous_quarter_range(n: int = -1) -> Tuple[date, date]:
 
     When `n=-1`, returns the date range of one quarter ago
     When `n=-2`, returns the date range of two quarter ago
-    So on and soforth
+    So on and so forth
 
     Example
     -------
@@ -154,9 +156,11 @@ def previous_quarter_range(n: int = -1) -> Tuple[date, date]:
     Returns
     -------
     Tuple[date, date]
-        [description]
     """
-    raise NotImplementedError
+    desired_date = pendulum.now().subtract(months=3 * -n)
+    fst_day_of_quarter = datetime(desired_date.year, 3 * desired_date.quarter - 2, 1)
+    last_day_of_quarter = fst_day_of_quarter + relativedelta(days=-1, months=3)
+    return fst_day_of_quarter.date(), last_day_of_quarter.date()
 
 
 def this_month_range(n: int = 0) -> Tuple[date, date]:
@@ -176,7 +180,13 @@ def this_month_range(n: int = 0) -> Tuple[date, date]:
     >>> aycu.this_month_range(n=-2)
     ('2020-01-01', '2020-01-31')
     """
-    raise NotImplementedError
+    dt = datetime.now()
+    today = date(dt.year, dt.month, dt.day)
+    if n != 0:
+        today = today_of_year(n)
+    first_day_of_month = today.replace(day=1)
+    last_day_of_month = first_day_of_month + relativedelta(months=1) - timedelta(days=1)
+    return first_day_of_month, last_day_of_month
 
 
 def this_month_range_til_today(n: int = 0) -> Tuple[date, date]:
@@ -196,7 +206,13 @@ def this_month_range_til_today(n: int = 0) -> Tuple[date, date]:
     >>> aycu.this_month_range_til_today()
     ('2022-01-01', '2022-01-28')
     """
-    raise NotImplementedError
+    dt = datetime.now()
+    today = date(dt.year, dt.month, dt.day)
+    if n != 0:
+        today = today_of_year(n)
+    first_day_of_month = today.replace(day=1)
+    last_day_of_month = today
+    return first_day_of_month, last_day_of_month
 
 
 def last_weekend(n: int = -1) -> Tuple[date, date]:
@@ -209,7 +225,12 @@ def last_weekend(n: int = -1) -> Tuple[date, date]:
         When `n=-2`, consider two week ago
         So on and soforth
     """
-    raise NotImplementedError
+    dt = pendulum.now()
+    last_week_dt = dt.subtract(days=7 * -n)
+    print(last_week_dt)
+    last_week_end = last_week_dt.end_of("week")  # ISO8601 week ends on Sunday
+    last_week_start = last_week_end.subtract(days=1)
+    return last_week_start.date(), last_week_end.date()
 
 
 def previous_year_range(n: int = -1) -> Tuple[date, date]:
@@ -227,9 +248,16 @@ def previous_year_range(n: int = -1) -> Tuple[date, date]:
         When `n=-2`, consider two year ago
         So on and soforth
     """
-    raise NotImplementedError
+    dt = pendulum.now()
+    last_year_dt = dt.subtract(years=1 * -n)
+    last_year_start = last_year_dt.start_of("year")
+    last_year_end = last_year_dt.end_of("year")
+    return last_year_start.date(), last_year_end.date()
 
 
-def weekofyear(d: date) -> int:
+def week_of_year(d: date, mon_as_start_of_week: bool = True) -> int:
     """Get the week number from a date"""
-    raise NotImplementedError
+    if mon_as_start_of_week:
+        return int(d.strftime("%W")) + 1
+    else:
+        return int(d.strftime("%U")) + 1
