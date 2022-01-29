@@ -132,7 +132,10 @@ def previous_month_range(n: int = -1) -> Tuple[date, date]:
     Tuple[date, date]
         [description]
     """
-    weekday = date.today().weekday()
+    today = date.today()
+    first = today.replace(day=1)
+    last_month = first - timedelta(days=1)
+    print(last_month)
     raise NotImplementedError
 
 
