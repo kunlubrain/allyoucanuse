@@ -1,8 +1,11 @@
-from typing import Iterable, Dict, Any
-import jsonlines
 import json
+from typing import Any, Dict, Iterable
 
-def read_jsonline_file(filename:str)->Iterable:
+import jsonlines
+from benedict import benedict
+
+
+def read_jsonline_file(filename: str) -> Iterable:
     """Read a jsonline file
 
     Parameters
@@ -25,15 +28,20 @@ def read_jsonline_file(filename:str)->Iterable:
             yield record
 
 
-def write_jsonline_file(filename:str, lines:Iterable):
+def write_jsonline_file(filename: str, lines: Iterable[object]):
     """Write the content of `lines` into a jsonline file"""
-    raise NotImplementedError
+    with open(filename, "w") as f:
+        for line in lines:
+            f.write(json.dumps(line) + "\n")
 
-def read_yml_file(filename:str)->Dict:
+
+def read_yml_file(filename: str) -> Dict:
     """Return the content of a yml file as a dict"""
-    raise NotImplementedError
+    d = benedict.from_yaml(filename)
+    return d
 
-def read_json_file(filename:str)->Any:
+
+def read_json_file(filename: str) -> Any:
     """Read a json file
 
     Parameters
@@ -50,9 +58,11 @@ def read_json_file(filename:str)->Any:
     >>> import allyoucanuse as aycu
     >>> content = aycu.read_json_file("tickets.json")
     """
-    raise NotImplementedError
+    with open(filename) as f:
+        return json.load(f)
 
 
-def write_json_file(filename:str, data:Any):
+def write_json_file(filename: str, data: Any):
     """Write the data into a jsonline file"""
-    raise NotImplementedError
+    with open(filename, "w") as f:
+        json.dump(data, f)
