@@ -4,32 +4,65 @@ ref
 
 This is collection of logging functions to print *colorful* logging message in terminal
 """
-
-import logging
 import inspect
+import logging
+
+from icecream import ic
+
+_logging_banner = "=" * 60
+
+
+class CustomFormatter(logging.Formatter):
+
+    grey = "\x1b[38;20m"
+    yellow = "\x1b[33;20m"
+    red = "\x1b[31;20m"
+    bold_red = "\x1b[31;1m"
+    green = "\33[32m"
+    reset = "\x1b[0m"
+
+    format = (
+        # "%(asctime)s - %(name)s - %(levelname)s - %(message)s (%(filename)s:%(lineno)d)"
+        "%(message)s"
+    )
+
+    FORMATS = {
+        logging.DEBUG: grey + format + reset,
+        logging.INFO: green + format + reset,
+        logging.WARNING: yellow + format + reset,
+        logging.ERROR: red + format + reset,
+        logging.CRITICAL: bold_red + format + reset,
+    }
+
+    def format(self, record):
+        log_fmt = self.FORMATS.get(record.levelno)
+        formatter = logging.Formatter(log_fmt)
+        return formatter.format(record)
 
 
 def init_logging_config(
-        level: int,
-        logging_file: str,
-        logging_format: str = "%(asctime)s %(levelname)s %(message)s"):
-    _validlevel = level in (logging.DEBUG, logging.INFO,
-                            logging.WARNING, logging.ERROR)
+    level: int,
+    logging_file: str,
+    logging_format: str = "%(asctime)s %(levelname)s %(message)s",
+):
+    _validlevel = level in (logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR)
     assert _validlevel, f"{level} is not supported. Expected debug|info|warning|error"
-    logging.basicConfig(
-        filename=logging_file,
-        format=logging_format,
-        level=level)
+    logging.basicConfig(filename=logging_file, format=logging_format, level=level)
 
 
 def get_logger(loggername: str) -> ...:
     """Get a standard logger with a given name"""
-
+    # init_logging_config(level=logging.DEBUG, logging_file="logging.log")
     logger = logging.getLogger(loggername)
-    raise NotImplementedError
+    logger.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    ch.setFormatter(CustomFormatter())
+    logger.addHandler(ch)
+    return logger
 
 
-_logging_banner = "="*60
+logger = get_logger(__name__)
 
 
 def log_start_step(msg: str) -> None:
@@ -42,8 +75,9 @@ def log_start_step(msg: str) -> None:
     >>>     ...
     >>> log_finish_step('XYZ')
     """
-    # print(_logging_banner)
-    #print("START:", msg)
+    # logger.info(f"{_logging_banner}")
+    logger.debug(_logging_banner)
+    logger.info(f"🍺 START: {msg}")
 
     # Pick one unicode icon e.g.
     # https://unicode-table.com/en/1F680/
@@ -51,8 +85,10 @@ def log_start_step(msg: str) -> None:
     # https://unicode-table.com/en/search/?q=beer
 
     # Color of text in this message = blue
-    raise NotImplementedError(
-        "Show a nice logging message with *color text* as in [1]. E.g. an icon + 'green' START + the msg")
+    # return 1
+    # raise NotImplementedError(
+    #     "Show a nice logging message with *color text* as in [1]. E.g. an icon + 'green' START + the msg"
+    # )
 
 
 def log_one_step(msg: str, fa_icon: str = "arrow-right") -> None:
@@ -67,21 +103,23 @@ def log_one_step(msg: str, fa_icon: str = "arrow-right") -> None:
     >>> log_step(msg="Do sth")
     ⇨ Do sth
     """
+    logger.warning(f"➤ {msg}")
+
     # We may need our own Logger - inherit from the standard logger
     # in order to implement our specific logging syntax/message
     #
     # icon: pick one from
     # https://unicode-table.com/en/search/?q=arrow
     # ⇨ Do sth
-    # ➤ 
+    # ➤
     #
     # Color of text in this message = yellow
-    raise NotImplementedError
+    # raise NotImplementedError
 
 
 def log_finish_step(msg: str) -> None:
     # Color of text in this message = green
-    raise NotImplementedError
+    logger.info(f"🍺 FINISH: {msg}")
 
 
 def flog(msg: str, nth_last_caller: int = 2):
