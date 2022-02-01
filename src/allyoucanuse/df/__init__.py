@@ -1,5 +1,6 @@
 from typing import Dict, List, Optional, Union
 
+import numpy as np
 from pandas import DataFrame
 
 
@@ -20,13 +21,16 @@ def df_row_contains(
     Return
     ------
         The part of the dataframe that is filtered
+
     """
     if s is None:
         return df
     if col is None:
         # filter all rows across all columns, if any field in the row contains `s`
-        return df[(df.iloc[:, :] == s).any(axis=1)]  # type: ignore
-    return df[df[col] == s]  # type: ignore
+        mask = np.column_stack([df[col].str.contains(s) for col in df])
+        return df.loc[mask.any(axis=1)]  # type: ignore
+        # return df[(df.iloc[:, :] == s).any(axis=1)]  # type: ignore, exact match
+    return df[df[col].str.contains(s)]  # type: ignore
 
 
 def df_column_stats(df: DataFrame, col: Optional[str]) -> Union[Dict, List[Dict]]:  # type: ignore
@@ -61,6 +65,7 @@ def df_column_stats(df: DataFrame, col: Optional[str]) -> Union[Dict, List[Dict]
            "mad":3.0
         }
     """
+    # TODO df.y_column_stats()
     if col is None:
         return df.describe().transpose().to_dict(orient="records")  # type: ignore
 
