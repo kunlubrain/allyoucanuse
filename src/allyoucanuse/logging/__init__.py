@@ -77,7 +77,7 @@ def log_start_step(msg: str) -> None:
     """
     # logger.info(f"{_logging_banner}")
     logger.debug(_logging_banner)
-    logger.info(f"🍺 START: {msg}")
+    logger.info(f"🚗 START: {msg}")
 
     # Pick one unicode icon e.g.
     # https://unicode-table.com/en/1F680/
@@ -156,5 +156,6 @@ def logthefunc():
     >>> @aycu.logthefunc
     >>> def foo():
     >>>   pass
+    print the params of foo()
     """
     raise NotImplementedError

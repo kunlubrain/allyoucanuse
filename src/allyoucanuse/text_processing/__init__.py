@@ -31,14 +31,18 @@ def is_date(s: str) -> bool:
 
 def is_integer(s: str) -> bool:
     """Return True if the text is an integer"""
-    return isinstance(s, int)
+    return s.isdigit()
 
 
 def is_float(s: str) -> bool:
     """Return True if the text is a floating number"""
-    return isinstance(s, float)
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
 
 
 def is_number(s: str) -> bool:
     """Return True if the text is either integer or floating number"""
-    return isinstance(s, int) or isinstance(s, float)
+    return is_integer(s) or is_float(s)
