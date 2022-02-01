@@ -65,8 +65,9 @@ def df_column_stats(df: DataFrame, col: Optional[str]) -> Union[Dict, List[Dict]
            "mad":3.0
         }
     """
-    # TODO df.y_column_stats()
     if col is None:
-        return df.describe().transpose().to_dict(orient="records")  # type: ignore
-
-    return df[col].describe().to_dict()  # type: ignore
+        return [df_column_stats(df, col) for col in df.columns]
+    value_counts = df[col].value_counts()
+    stats = df[col].describe().to_dict()
+    stats["value_counts"] = value_counts.to_dict()
+    return stats  # type: ignore
