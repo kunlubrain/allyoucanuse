@@ -6,6 +6,7 @@ This is collection of logging functions to print *colorful* logging message in t
 """
 import inspect
 import logging
+from typing import Iterable
 
 from icecream import ic
 
@@ -157,5 +158,80 @@ def logthefunc():
     >>> def foo():
     >>>   pass
     print the params of foo()
+    """
+    raise NotImplementedError
+
+_default_item_sep = '\n'+'-'*60
+def log_iters(
+    sequence:Iterable,
+    item_msg:str='',
+    item_sep:str=_default_item_sep)->None:
+    """Log each *item* in the sequence.
+
+    Parameters
+    ----------
+    sequence : Iterable
+        It can be an iterable (e.g. list) of anything.
+        It the item is a dict, then just print the dict
+    item_msg: str
+        Prefix message for each item
+
+    Example
+    >>> a [1, 2, 3]
+    >>> aycu.log_iter(a, item_msg='score')
+    score: 1
+    ------------------------------------------------------------ 
+    score: 2  
+    ------------------------------------------------------------ 
+    score: 3  
+    """
+    raise NotImplementedError
+
+def log_bump_indent()->None:
+    """When called, the default indent of the log message is increased
+
+    Example
+    >>> aycu.log_one_step(msg='hello')
+    hello
+    >>> aycu.log_bump_indent()
+    >>> aycu.log_one_step(msg='world')
+        world
+    >>> aycu.log_bump_indent()
+    >>> aycu.log_one_step(msg='foo')
+            foo
+    >>> aycu.log_one_step(msg='bar')
+            bar 
+    >>> aycu.log_reset_indent()
+    >>> aycu.log_one_step(msg='bar')
+    bar
+    >>> aycu.log_bump_indent()
+    >>> for i in [1,2]:
+    >>>     aycu.log_one_step(msg=i)
+    >>>     aycu.log_bump_indent()
+    >>>     for j in [4, 5]:
+    >>>         aycu.log_one_step(msg=j)
+    >>>     aycu.log_reduce_indent()
+        1
+            4
+            5
+        2
+            4
+            5
+    """
+    raise NotImplementedError
+
+def log_reset_indent()->None:
+    """Rest the indent level of the logging messages - i.e. no indent
+
+    Example
+    >>> help(aycu.log_bump_indent)
+    """
+    raise NotImplementedError
+
+def log_reduce_indent()->None:
+    """Decrease the indent level
+    
+    Example
+    >>> help(aycu.log_bump_indent)
     """
     raise NotImplementedError

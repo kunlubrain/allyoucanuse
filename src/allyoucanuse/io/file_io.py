@@ -66,3 +66,13 @@ def write_json_file(filename: str, data: Any):
     """Write the data into a jsonline file"""
     with open(filename, "w") as f:
         json.dump(data, f)
+
+
+def write_pickle(filename: str, data: Any):
+    """Write data into a pickle file"""
+    raise NotImplementedError
+
+
+def read_pickle(filename: str)->Any:
+    """Load data from a pickle file"""
+    raise NotImplementedError
