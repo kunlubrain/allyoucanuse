@@ -172,7 +172,7 @@ _default_item_sep = "\n" + "-" * 60
 
 
 def log_iters(
-    sequence: Iterable, item_msg: str = "", item_sep: str = _default_item_sep
+    sequence: Iterable[Any], item_msg: str = "", item_sep: str = _default_item_sep
 ) -> None:
     """Log each *item* in the sequence.
 
@@ -180,7 +180,7 @@ def log_iters(
     ----------
     sequence : Iterable
         It can be an iterable (e.g. list) of anything.
-        It the item is a dict, then just print the dict
+        If the item is a dict, then just print the dict
     item_msg: str
         Prefix message for each item
 
@@ -193,7 +193,12 @@ def log_iters(
     ------------------------------------------------------------
     score: 3
     """
-    raise NotImplementedError
+    for item in sequence:
+        if isinstance(item, dict):
+            logger.info(item_msg + ": " + str(item))
+        else:
+            logger.info(item_msg + ": " + str(item))
+        logger.info(item_sep)
 
 
 def log_bump_indent() -> None:
