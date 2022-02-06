@@ -68,11 +68,16 @@ def write_json_file(filename: str, data: Any):
         json.dump(data, f)
 
 
+import pickle
+
+
 def write_pickle(filename: str, data: Any):
     """Write data into a pickle file"""
-    raise NotImplementedError
+    with open(filename, "wb") as f:
+        pickle.dump(data, f)
 
 
-def read_pickle(filename: str)->Any:
+def read_pickle(filename: str) -> Any:
     """Load data from a pickle file"""
-    raise NotImplementedError
+    with open(filename, "rb") as f:
+        return pickle.load(f)

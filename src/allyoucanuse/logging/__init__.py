@@ -6,9 +6,9 @@ This is collection of logging functions to print *colorful* logging message in t
 """
 import inspect
 import logging
-from typing import Iterable
+from typing import Any, Iterable
 
-from icecream import ic
+# from icecream import ic
 
 _logging_banner = "=" * 60
 
@@ -142,7 +142,7 @@ def flog(msg: str, nth_last_caller: int = 2):
     print(f"{_caller}: {msg}")
 
 
-def logthefunc():
+def logthefunc(fn: Any):
     """A decrator used for debugging.
 
     It prints out the value of args of the callee.
@@ -159,13 +159,21 @@ def logthefunc():
     >>>   pass
     print the params of foo()
     """
-    raise NotImplementedError
 
-_default_item_sep = '\n'+'-'*60
+    def func(*a: Any, **kw: Any) -> Any:
+        # log_one_step(f"{fn}({a}, {kw})")
+        logger.info(f"{fn} with args: {a}, kws: {kw}")
+        return fn(*a, **kw)
+
+    return func
+
+
+_default_item_sep = "\n" + "-" * 60
+
+
 def log_iters(
-    sequence:Iterable,
-    item_msg:str='',
-    item_sep:str=_default_item_sep)->None:
+    sequence: Iterable, item_msg: str = "", item_sep: str = _default_item_sep
+) -> None:
     """Log each *item* in the sequence.
 
     Parameters
@@ -180,14 +188,15 @@ def log_iters(
     >>> a [1, 2, 3]
     >>> aycu.log_iter(a, item_msg='score')
     score: 1
-    ------------------------------------------------------------ 
-    score: 2  
-    ------------------------------------------------------------ 
-    score: 3  
+    ------------------------------------------------------------
+    score: 2
+    ------------------------------------------------------------
+    score: 3
     """
     raise NotImplementedError
 
-def log_bump_indent()->None:
+
+def log_bump_indent() -> None:
     """When called, the default indent of the log message is increased
 
     Example
@@ -200,7 +209,7 @@ def log_bump_indent()->None:
     >>> aycu.log_one_step(msg='foo')
             foo
     >>> aycu.log_one_step(msg='bar')
-            bar 
+            bar
     >>> aycu.log_reset_indent()
     >>> aycu.log_one_step(msg='bar')
     bar
@@ -220,7 +229,8 @@ def log_bump_indent()->None:
     """
     raise NotImplementedError
 
-def log_reset_indent()->None:
+
+def log_reset_indent() -> None:
     """Rest the indent level of the logging messages - i.e. no indent
 
     Example
@@ -228,9 +238,10 @@ def log_reset_indent()->None:
     """
     raise NotImplementedError
 
-def log_reduce_indent()->None:
+
+def log_reduce_indent() -> None:
     """Decrease the indent level
-    
+
     Example
     >>> help(aycu.log_bump_indent)
     """
