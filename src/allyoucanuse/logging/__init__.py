@@ -92,7 +92,7 @@ def log_start_step(msg: str) -> None:
     # )
 
 
-def log_one_step(msg: str, fa_icon: str = "arrow-right") -> None:
+def log_one_step(msg: str, fa_icon: str = "arrow-right", indent: int = 1) -> None:
     """Print a log message for one `step` of task
 
     Parameters
@@ -104,7 +104,7 @@ def log_one_step(msg: str, fa_icon: str = "arrow-right") -> None:
     >>> log_step(msg="Do sth")
     ⇨ Do sth
     """
-    logger.warning(f"➤ {msg}")
+    logger.warning(" " * indent * 4 + f"➤ {msg}")
 
     # We may need our own Logger - inherit from the standard logger
     # in order to implement our specific logging syntax/message
@@ -232,6 +232,8 @@ def log_bump_indent() -> None:
             4
             5
     """
+    logger.indent += 1
+
     raise NotImplementedError
 
 
