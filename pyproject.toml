@@ -11,6 +11,7 @@ jsonlines = "^3.0.0"
 pendulum = "^2.1.2"
 PyYAML = "^6.0"
 python-benedict = "^0.24.3"
+kink = "^0.6.2"
 
 [tool.poetry.dev-dependencies]
 

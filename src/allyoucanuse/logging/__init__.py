@@ -92,7 +92,7 @@ def log_start_step(msg: str) -> None:
     # )
 
 
-def log_one_step(msg: str, fa_icon: str = "arrow-right", indent: int = 1) -> None:
+def log_one_step(msg: str, fa_icon: str = "arrow-right", indent: int = 0) -> None:
     """Print a log message for one `step` of task
 
     Parameters
@@ -200,6 +200,22 @@ def log_iters(
             logger.info(item_msg + ": " + str(item))
         logger.info(item_sep)
 
+
+from functools import wraps
+
+
+def indent_level(indent=0):
+    indent_level.indent = indent
+
+    def inner_func(function):
+        @wraps(function)
+        def wrapper(*args, **kwargs):
+
+            function(*args, **kwargs)
+
+        return wrapper
+
+    return inner_func
 
 
 def log_bump_indent() -> None:
