@@ -201,6 +201,7 @@ def log_iters(
         logger.info(item_sep)
 
 
+
 def log_bump_indent() -> None:
     """When called, the default indent of the log message is increased
 
